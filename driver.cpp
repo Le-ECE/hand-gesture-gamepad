@@ -19,9 +19,6 @@ Yu Zhang
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/video/background_segm.hpp"
 
-
-
-
 // ViGEm Imports
 #include "ViGEm/Client.h"
 #include "ViGEm/Util.h"

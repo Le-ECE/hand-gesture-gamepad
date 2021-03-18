@@ -37,10 +37,9 @@ void MyTimer::MySlot() {
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
     MyTimer* mTimer = new MyTimer(60);
+    MainWindow w;
     w.show();
-
     return a.exec();
 }
 
