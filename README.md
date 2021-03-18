@@ -3,10 +3,10 @@ OpenCV-based gamepad with hand gesture detection.
 
 ## Build Instructions
 
-### Install the ViGEmBus driver
+### Installling the ViGEmBus driver
 1. Download and run the [installer](https://github.com/ViGEm/ViGEmBus/releases).
 
-### Install neccessary libraries
+### Installling the neccessary libraries
 Github's max file size is 100 MB, so you'll need to download the [libraries](https://drive.google.com/file/d/1nXv2xGv0qZw3p3Zejyg9sOplehEtdbnW/view?usp=sharing) independently. 
 
 1. Read [this](https://www.imatest.com/docs/editing-system-environment-variables/#Windows) if you don't know how to add variables to your system PATH.
