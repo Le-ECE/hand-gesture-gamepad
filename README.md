@@ -3,8 +3,10 @@ OpenCV-based gamepad with hand gesture detection.
 
 ## Build Instructions
 
-### Install neccessary libraries
+### Install the ViGEmBus driver
+1. Download and run the [installer](https://github.com/ViGEm/ViGEmBus/releases).
 
+### Install neccessary libraries
 Github's max file size is 100 MB, so you'll need to download the [libraries](https://drive.google.com/file/d/1nXv2xGv0qZw3p3Zejyg9sOplehEtdbnW/view?usp=sharing) independently. 
 
 1. Read [this](https://www.imatest.com/docs/editing-system-environment-variables/#Windows) if you don't know how to add variables to your system PATH.
@@ -15,14 +17,12 @@ Github's max file size is 100 MB, so you'll need to download the [libraries](htt
 6. Edit your System Path/add a new line that says %DLLPATH%.
 
 ### Compiling the program
-
 1. Click Code > Open Visual Studio for the quickest way to clone the project. You'll need Visual Studio 2019.
 2. Double click on 'handGesture.sln' if not already open.
 3. Change the configuration to Release and x64.
 4. Click Build > Build Solution (Rebuild Solution after making changes).
 
 ### Running the program
-
 1. Click Local Windows Debugger to run the program.
 2. To view console output, right click on 'handGesture' in the Solution Explorer.
   a. Make sure the configuration being edited is set to Release.
