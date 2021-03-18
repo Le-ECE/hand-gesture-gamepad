@@ -22,6 +22,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v142</PlatformToolset>
+    <UseDebugLibraries>true</UseDebugLibraries>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -44,13 +45,13 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <IncludePath>C:\opencv\build\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(GESTUREPATH)\opencv\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(GESTUREPATH)\opencv\build\x64\vc16\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)Qt\5.13.2\msvc2017_64\include;$(SolutionDir)opencv\build\include;$(SolutionDir)ViGEmClient\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Qt\5.13.2\msvc2017_64\lib;$(SolutionDir)opencv\build\x64\vc16\lib;$(SolutionDir)ViGEmClient\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(GESTUREPATH)\Qt\5.13.2\msvc2017_64\include;$(GESTUREPATH)\opencv\build\include;$(GESTUREPATH)\ViGEmClient\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(GESTUREPATH)\Qt\5.13.2\msvc2017_64\lib;$(GESTUREPATH)\opencv\build\x64\vc16\lib;$(GESTUREPATH)\ViGEmClient\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
