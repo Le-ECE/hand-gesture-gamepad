@@ -1,11 +1,11 @@
-# hand-gesture-gamepad
+# hand-gesture-gamepad (WIP)
 OpenCV-based gamepad with hand gesture detection.
 
 ## Build Instructions
 
 ### Install neccessary libraries
 
-Github's max file size is 100 MB, so you'll need to download the libraries independently. 
+Github's max file size is 100 MB, so you'll need to download the [libraries](https://drive.google.com/file/d/1nXv2xGv0qZw3p3Zejyg9sOplehEtdbnW/view?usp=sharing) independently. 
 
 1. Read [this](https://www.imatest.com/docs/editing-system-environment-variables/#Windows) if you don't know how to add variables to your system PATH.
 2. Drag this folder wherever you want ('C:/libraries' .etc)
@@ -28,4 +28,4 @@ Github's max file size is 100 MB, so you'll need to download the libraries indep
   a. Make sure the configuration being edited is set to Release.
   b. Click Linker > System > SubSystem > Console (/SUBSYSTEM:CONSOLE).
   c. To disable console output again, change it back to Windows (/SUBSYSTEM:WINDOWS).
-3. You can also run 'handGesture.exe' under /x64/Release after building the program. You'll need either the 
+3. You can also run 'handGesture.exe' under /x64/Release after building the program. You'll either need to have the .dlls in the same folder, or have a PATH variable pointing to the vc16\bin folder.
