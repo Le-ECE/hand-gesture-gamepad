@@ -43,6 +43,7 @@ Yu Zhang
 #define TRIGGER_MAX 255
 #define THUMBSTICK_MIN -32768
 #define THUMBSTICK_MAX 32767
+#define PI 3.14159265358979323846
 
 // Namespaces
 using namespace cv;
@@ -175,6 +176,43 @@ Mat threshold_image(Mat img_gray, Mat img_threshold)
     return img_threshold;
 }
 
+float innerAngle(float px1, float py1, float px2, float py2, float cx1, float cy1)
+{
+    float dist1 = sqrt((px1 - cx1) * (px1 - cx1) + (py1 - cy1) * (py1 - cy1));
+    float dist2 = sqrt((px2 - cx1) * (px2 - cx1) + (py2 - cy1) * (py2 - cy1));
+
+    float Ax, Ay;
+    float Bx, By;
+    float Cx, Cy;
+
+    Cx = cx1;
+    Cy = cy1;
+    if (dist1 < dist2)
+    {
+        Bx = px1;
+        By = py1;
+        Ax = px2;
+        Ay = py2;
+    }
+    else {
+        Bx = px2;
+        By = py2;
+        Ax = px1;
+        Ay = py1;
+    }
+
+    float Q1 = Cx - Ax;
+    float Q2 = Cy - Ay;
+    float P1 = Bx - Ax;
+    float P2 = By - Ay;
+
+    float A = acos((P1 * Q1 + P2 * Q2) / (sqrt(P1 * P1 + P2 * P2) * sqrt(Q1 * Q1 + Q2 * Q2)));
+
+    A = A * 180 / PI;
+
+    return A;
+}
+
 Mat captureImage(void) {
     cam.read(img);
     Rect roi(0, 0, img.cols, img.rows);
@@ -186,47 +224,42 @@ Mat captureImage(void) {
     vector<vector<Point> >contours;
     vector<Vec4i>hierarchy;
     findContours(img_threshold, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE, Point());
-
+    fingerCount = 0;
     if (contours.size() > 0) {
-        indexOfBiggestContour = -1;
-        sizeOfBiggestContour = 0;
-
-        for (i = 0; i < contours.size(); i++) {
-            if (contours[i].size() > sizeOfBiggestContour) {
-                sizeOfBiggestContour = contours[i].size();
-                indexOfBiggestContour = i;
-            }
-        }
+        int indexOfBiggestContour = -1;
+        int sizeOfBiggestContour = 0;
 
         vector<vector<int> >hull(contours.size());
-        vector<vector<Point> >hullPoint(contours.size());
         vector<vector<Vec4i> >defects(contours.size());
         vector<vector<Point> >defectPoint(contours.size());
-        vector<vector<Point> >contours_poly(contours.size());
+        vector<vector<Point> >hullPoint(contours.size());
 
-        Point2f rect_point[4];
-        vector<Rect> boundRect(contours.size());
-
-        for (i = 0; i < contours.size(); i++) {
-            if (contourArea(contours[i]) > 5000) {
-                convexHull(contours[i], hull[i], true);
+        for (int i = 0; i < contours.size(); i++)
+        {
+            if (contourArea(contours[i]) > 5000)
+            {
+                convexHull(contours[i], hull[i], false);
                 convexityDefects(contours[i], hull[i], defects[i]);
-                fingerCount = 0;
 
-                if (indexOfBiggestContour == i) {
-                    for (k = 0; k < hull[i].size(); k++) {
-                        ind = hull[i][k];
-                        hullPoint[i].push_back(contours[i][ind]);
+                for (int k = 0; k < defects[i].size(); k++)
+                {
+                    if (defects[i][k][3] > 15 * 256)
+                    {
+                        int ind_0 = defects[i][k][0];
+                        int ind_1 = defects[i][k][1];
+                        int ind_2 = defects[i][k][2];
+                        defectPoint[i].push_back(contours[i][ind_2]);
+                        hullPoint[i].push_back(contours[i][ind_0]);
                     }
-                    for (k = 0; k < defects[i].size(); k++) {
-                        if (defects[i][k][3] > 13 * 256) {
-                            int p_end = defects[i][k][1];
-                            int p_far = defects[i][k][2];
-                            defectPoint[i].push_back(contours[i][p_far]);
-                            circle(img_roi, contours[i][p_end], 3, Scalar(0, 255, 0), 2);
-                            fingerCount++;
-                        }
-                    }
+                }
+                for (int k = 1; k < hullPoint[i].size(); k++)
+                {
+                    Point p1 = defectPoint[i][k - 1];
+                    Point p2 = defectPoint[i][k];
+                    Point c1 = hullPoint[i][k];
+                    float angle = innerAngle(p1.x, p1.y, p2.x, p2.y, c1.x, c1.y);
+                    if (round(angle) < 90)
+                        fingerCount++;
                 }
             }
         }
@@ -237,6 +270,7 @@ Mat captureImage(void) {
     //imshow("Gray_image", img_gray);
     //imshow("Thresholded_image", img_threshold);
     imshow("ROI", img_roi);
+    // 230-234 r useless, remove them after if u want
     return(img);
 }
 
