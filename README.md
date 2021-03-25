@@ -9,7 +9,7 @@ OpenCV-based gamepad with hand gesture detection.
 ### Installling the neccessary libraries
 Github's max file size is 100 MB, so you'll need to download the [libraries](https://drive.google.com/file/d/1nXv2xGv0qZw3p3Zejyg9sOplehEtdbnW/view?usp=sharing) independently. 
 
-1. Download [QT 5.13.2](https://download.qt.io/archive/qt/5.13/5.13.2/).
+1. Download [QT 5.13.2](https://download.qt.io/archive/qt/5.13/5.13.2/). Install QT for msvc2017.
 2. Read [this](https://www.imatest.com/docs/editing-system-environment-variables/#Windows) if you don't know how to add variables to your system PATH.
 3. Drag this folder wherever you want ('C:/libraries' .etc)
 4. Add a new system variable called GESTUREPATH that points to the folder.
