@@ -13,8 +13,10 @@ Github's max file size is 100 MB, so you'll need to download the [libraries](htt
 2. Drag this folder wherever you want ('C:/libraries' .etc)
 3. Add a new system variable called GESTUREPATH that points to the folder.
 4. Edit your System Path/add a new line that says %GESTUREPATH%.
-5. Add a new system variable called DLLPATH that points to the 'your install folder'/libraries/oepncv/build\x64\vc16\bin
+5. Add a new system variable called DLLPATH that points to 'your install folder'/libraries/oepncv/build\x64\vc16\bin
 6. Edit your System Path/add a new line that says %DLLPATH%.
+7. Add a new system variable called QTDLL that points to 'your install folder'/Qt\5.13.2\msvc2017_64\bin
+8. Edit your System Path/add a new line that says %QTDLL%.
 
 ### Compiling the program
 1. Click Code > Open Visual Studio for the quickest way to clone the project. You'll need Visual Studio 2019.

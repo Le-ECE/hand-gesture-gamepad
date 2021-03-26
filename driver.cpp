@@ -36,6 +36,11 @@ Yu Zhang
 #pragma comment(lib,"XInput.lib")
 #pragma comment(lib,"Xinput9_1_0.lib")
 
+// QT Imports
+#include <QSettings>
+#include <QString>
+#include <QApplication>
+
 // Constants and Definitions
 #define WIN32_LEAN_AND_MEAN
 #define MAX_LOADSTRING 100
@@ -51,15 +56,15 @@ using namespace std;
 
 // Struct Declarations
 typedef struct _GESTURE {
-    std::string name;
+    std::string gestureName;
     USHORT button;
     SHORT leftX, leftY, rightX, rightY;
     BYTE leftTrig, rightTrig;
 } GESTURE, * PGESTURE;
 
 typedef struct _PROFILE {
-    std::string name;
-    GESTURE list[10];
+    std::string profileName;
+    GESTURE list[6];
 
 } PROFILE, * PPROFILE;
 
@@ -69,12 +74,10 @@ typedef struct _SETTINGS {
 } SETTINGS, * PSETTINGS;
 
 // Settings Variables
-std::string path;
-std::string defaultProfile;
-fstream settingsFile;
-fstream profileFile;
-SETTINGS currentSettings;
 PROFILE currentProfile;
+//QString path = ":/settings.ini";
+//QSettings settings(path, QSettings::IniFormat);
+QSettings settings("settings.ini", QSettings::IniFormat);
 
 // Gesture Variables
 int indexOfBiggestContour, sizeOfBiggestContour, fingerCount, ind, i, k;
@@ -98,7 +101,7 @@ void sendReport(void);
 
 // Used to quickly assign action values
 GESTURE configGesture(
-    std::string name,
+    std::string gestureName,
     USHORT button,
     SHORT leftX,
     SHORT leftY,
@@ -109,7 +112,7 @@ GESTURE configGesture(
 ) {
     GESTURE assign;
 
-    assign.name = name;
+    assign.gestureName = gestureName;
     assign.button = button;
     assign.leftX = leftX;
     assign.leftY = leftY;
@@ -117,6 +120,38 @@ GESTURE configGesture(
     assign.rightY = rightY;
     assign.leftTrig = leftTrig;
     assign.rightTrig = rightTrig;
+
+    return assign;
+}
+
+PROFILE configProfile() {
+    PROFILE assign;
+
+    std::string gestureName;
+    USHORT button;
+    SHORT leftX;
+    SHORT leftY;
+    SHORT rightX;
+    SHORT rightY;
+    BYTE leftTrig;
+    BYTE rightTrig;
+
+    assign.profileName = settings.value("currentProfile/profileName", "default").toString().toLocal8Bit().constData();
+    
+    for (int i = 0; i <= 5; i++) {
+        gestureName = settings.value(QString::number(i) +"/gestureName", "null").toString().toLocal8Bit().constData();
+        button = settings.value(QString::number(i) + "/button", 0x0000).toInt();
+        leftX = settings.value(QString::number(i) + "/leftX", 0).toInt();
+        leftY = settings.value(QString::number(i) + "/leftY", 0).toInt();
+        rightX = settings.value(QString::number(i) + "/rightX", 0).toInt();
+        rightY = settings.value(QString::number(i) + "/rightY", 0).toInt();
+        leftTrig = settings.value(QString::number(i) + "/leftTrig", 0).toInt();
+        rightTrig = settings.value(QString::number(i) + "/rightTrig", 0).toInt();
+
+        assign.list[i] = configGesture(gestureName, button, leftX, leftY, rightX, rightY, leftTrig, rightTrig);
+    }
+
+
 
     return assign;
 }
@@ -143,23 +178,24 @@ int driverInitialize(void) {
         std::cerr << "Target plugin failed with error code: 0x" << std::hex << pir << std::endl;
         return -1;
     }
+        
+  //  int tester = settings.value("Controls/stick", 0).toInt();
 
-    // Add code to load profile from file
-        //path = (string)(getenv("APPDATA")) + "\Air Wheel Driver\settings.ini";
-        //settings.open(appdata, std::fstream::in | std::fstream::out || std::fstream::app);
-        //TCHAR profile[100];
-        //GetPrivateProfileString(_T("Profile"), _T("name"), _T(""), profile, 100, _T(":\\settings.ini"));
+    // LOAD LAST USED PROFILE VIA SETTINGS.INI
+        // GUI will read from profileName.ini and overwrite settings file, and currentProfile is set to that
+        // Visual Studio Debugger reads settings.ini from root folder, running exe directly reads settings file in same folder as exe
+    currentProfile = configProfile();
+    currentGesture = currentProfile.list[0]; // Default Gesture (This line must be run after assigning gestures)
 
     // Gesture List Initialization (TEST)
-    currentProfile.name = "Profile 1";
-    currentProfile.list[0] = configGesture("None", 0, 0, 0, 0, 0, 0, 0);
-    currentProfile.list[1] = configGesture("1 Finger", XUSB_GAMEPAD_A, 0, 0, 30000, 30000, 255, 255);
-    currentProfile.list[2] = configGesture("2 Fingers", XUSB_GAMEPAD_B, 30000, 30000, 0, 0, 0, 0);
-    currentProfile.list[3] = configGesture("3 Fingers", XUSB_GAMEPAD_X, 0, 0, 30000, 30000, 255, 255);
-    currentProfile.list[4] = configGesture("4 Fingers", XUSB_GAMEPAD_Y, 30000, 30000, 0, 0, 0, 0);
-    currentProfile.list[5] = configGesture("5 Fingers", 0x3000, 0, 0, 30000, 30000, 255, 255);
+    //currentProfile.name = "Profile 1";
+    //currentProfile.list[0] = configGesture("None", 0, 0, 0, 0, 0, 0, 0);
+    //currentProfile.list[1] = configGesture("1 Finger", XUSB_GAMEPAD_A, 0, 0, tester, tester, 0, 0);
+    //currentProfile.list[2] = configGesture("2 Fingers", XUSB_GAMEPAD_B, tester, tester, 0, 0, 0, 0);
+    //currentProfile.list[3] = configGesture("3 Fingers", XUSB_GAMEPAD_Y, 0, 0, tester, tester, 0, 0);
+    //currentProfile.list[4] = configGesture("4 Fingers", XUSB_GAMEPAD_X, tester, tester, 0, 0, 0, 0);
+    //currentProfile.list[5] = configGesture("5 Fingers", 0xF000, 0, 0, tester, tester, 0, 0);
 
-    currentGesture = currentProfile.list[0]; // Default Gesture (This line must be run after assigning gestures)
     return 0;
 }
 
@@ -215,7 +251,7 @@ float innerAngle(float px1, float py1, float px2, float py2, float cx1, float cy
 
 Mat captureImage(void) {
     cam.read(img);
-    Rect roi(0, 0, img.cols, img.rows);
+    Rect roi(0, 0, 300, 300);
     img_roi = img(roi);
 
     img_gray = gray_image(img_gray, img_roi);
@@ -243,16 +279,26 @@ Mat captureImage(void) {
 
                 for (int k = 0; k < defects[i].size(); k++)
                 {
-                    if (defects[i][k][3] > 15 * 256)
+                    if (defects[i][k][3] > 15 * 256) // filter defects by depth
                     {
                         int ind_0 = defects[i][k][0];
                         int ind_1 = defects[i][k][1];
                         int ind_2 = defects[i][k][2];
                         defectPoint[i].push_back(contours[i][ind_2]);
                         hullPoint[i].push_back(contours[i][ind_0]);
+
+                        // get rid of
+                        cv::circle(img_roi, contours[i][ind_0], 5, Scalar(0, 255, 0), -1);
+                        // hull points including top (arm) point
+                        cv::circle(img_roi, contours[i][ind_1], 5, Scalar(0, 255, 0), -1);
+                        // hull points including bottom (arm) point
+                        cv::circle(img_roi, contours[i][ind_2], 5, Scalar(0, 0, 255), -1);
+                        // null points
+                        cv::line(img_roi, contours[i][ind_2], contours[i][ind_0], Scalar(0, 0, 255), 1);
+                        cv::line(img_roi, contours[i][ind_2], contours[i][ind_1], Scalar(0, 0, 255), 1);
                     }
                 }
-                for (int k = 1; k < hullPoint[i].size(); k++)
+                for (int k = 1; k <= hullPoint[i].size(); k++)
                 {
                     Point p1 = defectPoint[i][k - 1];
                     Point p2 = defectPoint[i][k];
@@ -261,16 +307,22 @@ Mat captureImage(void) {
                     if (round(angle) < 90)
                         fingerCount++;
                 }
+
+                drawContours(img_roi, contours, i, Scalar(0, 255, 0), 1, 8, vector<Vec4i>(), 0, Point());
+
+                if (fingerCount == 6)
+                    fingerCount = 5;
             }
         }
     }
 
-    putText(img, "Count: " + std::to_string(fingerCount), Point(70, 70), FONT_HERSHEY_SIMPLEX, 3, Scalar(255, 0, 0), 2, 8, false);
+    putText(img, "Count: " + std::to_string(fingerCount), Point(20, 40), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0), 2, 8, false);
+    putText(img, "Gesture: " + currentGesture.gestureName, Point(20, 80), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0), 2, 8, false);
+    //putText(img, "Profile: " + currentProfile.profileName, Point(20, 120), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0), 2, 8, false);
     //imshow("Original_image", img);
     //imshow("Gray_image", img_gray);
     //imshow("Thresholded_image", img_threshold);
     imshow("ROI", img_roi);
-    // 230-234 r useless, remove them after if u want
     return(img);
 }
 
@@ -279,6 +331,7 @@ void sendReport(void) {
         currentGesture = currentProfile.list[fingerCount];
     else
         currentGesture = currentProfile.list[0];
+
 
     // Button Press
     report.wButtons = currentGesture.button;
