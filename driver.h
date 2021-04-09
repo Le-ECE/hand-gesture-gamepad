@@ -69,6 +69,7 @@ Mat threshold_image(Mat img_gray, Mat img_roi);
 Mat captureImage(void);
 float innerAngle(float px1, float py1, float px2, float py2, float cx1, float cy1);
 int driverInitialize(void);
+void loadProfile(void);
 void sendReport(void);
 
 GESTURE configGesture(std::string name,

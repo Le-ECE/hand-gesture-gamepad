@@ -71,8 +71,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="gesture_panel.cpp" />
+    <ClCompile Include="profile_data.cpp" />
+    <QtUic Include="driver_setting_window.ui" />
+    <QtUic Include="gesture_panel.ui" />
     <QtUic Include="mainwindow.ui" />
     <ClCompile Include="driver.cpp" />
+    <ClCompile Include="driver_setting_window.cpp" />
     <ClCompile Include="mainwindow.cpp" />
     <ClCompile Include="main.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
@@ -84,10 +89,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="driver.h" />
+    <QtMoc Include="driver_setting_window.h" />
     <ClInclude Include="framework.h" />
+    <QtMoc Include="gesture_panel.h" />
+    <ClInclude Include="profile_data.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
-    <QtMoc Include="MyTimer.h" />
+    <ClInclude Include="ui_driver_setting_window.h" />
+    <ClInclude Include="ui_gesture_panel.h" />
     <ClInclude Include="ui_mainwindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

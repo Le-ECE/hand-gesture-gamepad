@@ -75,8 +75,6 @@ typedef struct _SETTINGS {
 
 // Settings Variables
 PROFILE currentProfile;
-//QString path = ":/settings.ini";
-//QSettings settings(path, QSettings::IniFormat);
 QSettings settings("settings.ini", QSettings::IniFormat);
 
 // Gesture Variables
@@ -97,6 +95,7 @@ Mat gray_image(Mat img_gray, Mat img_roi);
 Mat threshold_image(Mat img_gray, Mat img_roi);
 Mat captureImage(void);
 int driverInitialize(void);
+void loadProfile(void);
 void sendReport(void);
 
 // Used to quickly assign action values
@@ -151,13 +150,11 @@ PROFILE configProfile() {
         assign.list[i] = configGesture(gestureName, button, leftX, leftY, rightX, rightY, leftTrig, rightTrig);
     }
 
-
-
     return assign;
 }
 
 int driverInitialize(void) {
-    XUSB_REPORT_INIT(&report);						// Allocates memory for and initializes gamepad report
+    XUSB_REPORT_INIT(&report);						
 
     // Checks for Webcam and Driver Initialization Errors   
     if (!cam.isOpened())
@@ -178,25 +175,17 @@ int driverInitialize(void) {
         std::cerr << "Target plugin failed with error code: 0x" << std::hex << pir << std::endl;
         return -1;
     }
-        
-  //  int tester = settings.value("Controls/stick", 0).toInt();
 
+    loadProfile();
+    return 0;
+}
+
+void loadProfile(void) {
     // LOAD LAST USED PROFILE VIA SETTINGS.INI
         // GUI will read from profileName.ini and overwrite settings file, and currentProfile is set to that
         // Visual Studio Debugger reads settings.ini from root folder, running exe directly reads settings file in same folder as exe
     currentProfile = configProfile();
     currentGesture = currentProfile.list[0]; // Default Gesture (This line must be run after assigning gestures)
-
-    // Gesture List Initialization (TEST)
-    //currentProfile.name = "Profile 1";
-    //currentProfile.list[0] = configGesture("None", 0, 0, 0, 0, 0, 0, 0);
-    //currentProfile.list[1] = configGesture("1 Finger", XUSB_GAMEPAD_A, 0, 0, tester, tester, 0, 0);
-    //currentProfile.list[2] = configGesture("2 Fingers", XUSB_GAMEPAD_B, tester, tester, 0, 0, 0, 0);
-    //currentProfile.list[3] = configGesture("3 Fingers", XUSB_GAMEPAD_Y, 0, 0, tester, tester, 0, 0);
-    //currentProfile.list[4] = configGesture("4 Fingers", XUSB_GAMEPAD_X, tester, tester, 0, 0, 0, 0);
-    //currentProfile.list[5] = configGesture("5 Fingers", 0xF000, 0, 0, tester, tester, 0, 0);
-
-    return 0;
 }
 
 Mat gray_image(Mat img_gray, Mat img_roi)
@@ -241,12 +230,9 @@ float innerAngle(float px1, float py1, float px2, float py2, float cx1, float cy
     float Q2 = Cy - Ay;
     float P1 = Bx - Ax;
     float P2 = By - Ay;
-
     float A = acos((P1 * Q1 + P2 * Q2) / (sqrt(P1 * P1 + P2 * P2) * sqrt(Q1 * Q1 + Q2 * Q2)));
 
-    A = A * 180 / PI;
-
-    return A;
+    return (A * 180 / PI);
 }
 
 Mat captureImage(void) {
@@ -279,7 +265,7 @@ Mat captureImage(void) {
 
                 for (int k = 0; k < defects[i].size(); k++)
                 {
-                    if (defects[i][k][3] > 15 * 256) // filter defects by depth
+                    if (defects[i][k][3] > 15 * 256) 
                     {
                         int ind_0 = defects[i][k][0];
                         int ind_1 = defects[i][k][1];
@@ -287,13 +273,9 @@ Mat captureImage(void) {
                         defectPoint[i].push_back(contours[i][ind_2]);
                         hullPoint[i].push_back(contours[i][ind_0]);
 
-                        // get rid of
                         cv::circle(img_roi, contours[i][ind_0], 5, Scalar(0, 255, 0), -1);
-                        // hull points including top (arm) point
                         cv::circle(img_roi, contours[i][ind_1], 5, Scalar(0, 255, 0), -1);
-                        // hull points including bottom (arm) point
                         cv::circle(img_roi, contours[i][ind_2], 5, Scalar(0, 0, 255), -1);
-                        // null points
                         cv::line(img_roi, contours[i][ind_2], contours[i][ind_0], Scalar(0, 0, 255), 1);
                         cv::line(img_roi, contours[i][ind_2], contours[i][ind_1], Scalar(0, 0, 255), 1);
                     }
@@ -318,11 +300,6 @@ Mat captureImage(void) {
 
     putText(img, "Count: " + std::to_string(fingerCount), Point(20, 40), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0), 2, 8, false);
     putText(img, "Gesture: " + currentGesture.gestureName, Point(20, 80), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0), 2, 8, false);
-    //putText(img, "Profile: " + currentProfile.profileName, Point(20, 120), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0), 2, 8, false);
-    //imshow("Original_image", img);
-    //imshow("Gray_image", img_gray);
-    //imshow("Thresholded_image", img_threshold);
-    imshow("ROI", img_roi);
     return(img);
 }
 
@@ -332,8 +309,6 @@ void sendReport(void) {
     else
         currentGesture = currentProfile.list[0];
 
-
-    // Button Press
     report.wButtons = currentGesture.button;
     report.sThumbLX = currentGesture.leftX;
     report.sThumbLY = currentGesture.leftY;

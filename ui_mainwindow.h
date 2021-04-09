@@ -11,15 +11,19 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSlider>
+#include <QtWidgets/QScrollArea>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -28,19 +32,35 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
-    QPushButton *pushButton_6;
-    QGroupBox *groupBox_2;
-    QComboBox *comboBox;
+    QGridLayout *gridLayout_2;
+    QWidget *widget_2;
+    QVBoxLayout *verticalLayout_4;
+    QWidget *widget_4;
+    QHBoxLayout *horizontalLayout_3;
+    QPushButton *btn_change_driver;
+    QPushButton *btn_install_driver;
+    QCheckBox *cbb_auto_start;
+    QPushButton *btn_pf_new;
+    QPushButton *btn_pf_save;
+    QPushButton *btn_pf_delete;
+    QPushButton *btn_pf_load;
+    QComboBox *cbb_profile;
+    QScrollArea *scrollArea;
+    QWidget *scrollAreaWidgetContents;
+    QVBoxLayout *verticalLayout_3;
+    QWidget *widget_5;
+    QVBoxLayout *verticalLayout_2;
+    QLabel *label;
+    QWidget *widget_con;
+    QVBoxLayout *verticalLayout_5;
+    QSpacerItem *verticalSpacer;
+    QWidget *widget;
+    QVBoxLayout *verticalLayout;
     QGroupBox *groupBox;
     QGridLayout *gridLayout;
-    QPushButton *pushButton;
-    QPushButton *pushButton_3;
-    QPushButton *pushButton_2;
-    QPushButton *pushButton_4;
-    QPushButton *pushButton_5;
-    QSlider *horizontalSlider;
-    QLabel *lb_slider;
-    QPushButton *btn_ld;
+    QLabel *label_1;
+    QWidget *widget_3;
+    QHBoxLayout *horizontalLayout_2;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -48,66 +68,153 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(503, 373);
+        MainWindow->resize(1280, 941);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-        pushButton_6 = new QPushButton(centralwidget);
-        pushButton_6->setObjectName(QString::fromUtf8("pushButton_6"));
-        pushButton_6->setGeometry(QRect(400, 280, 75, 23));
-        groupBox_2 = new QGroupBox(centralwidget);
-        groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
-        groupBox_2->setGeometry(QRect(280, 30, 181, 80));
-        comboBox = new QComboBox(groupBox_2);
-        comboBox->addItem(QString());
-        comboBox->addItem(QString());
-        comboBox->addItem(QString());
-        comboBox->addItem(QString());
-        comboBox->addItem(QString());
-        comboBox->setObjectName(QString::fromUtf8("comboBox"));
-        comboBox->setGeometry(QRect(30, 30, 69, 22));
-        groupBox = new QGroupBox(centralwidget);
+        centralwidget->setMinimumSize(QSize(1280, 900));
+        gridLayout_2 = new QGridLayout(centralwidget);
+        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        widget_2 = new QWidget(centralwidget);
+        widget_2->setObjectName(QString::fromUtf8("widget_2"));
+        widget_2->setMinimumSize(QSize(280, 0));
+        widget_2->setMaximumSize(QSize(16777215, 16777215));
+        verticalLayout_4 = new QVBoxLayout(widget_2);
+        verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
+        widget_4 = new QWidget(widget_2);
+        widget_4->setObjectName(QString::fromUtf8("widget_4"));
+        widget_4->setMinimumSize(QSize(0, 50));
+        horizontalLayout_3 = new QHBoxLayout(widget_4);
+        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+        btn_change_driver = new QPushButton(widget_4);
+        btn_change_driver->setObjectName(QString::fromUtf8("btn_change_driver"));
+        btn_change_driver->setMaximumSize(QSize(100, 16777215));
+
+        horizontalLayout_3->addWidget(btn_change_driver);
+
+        btn_install_driver = new QPushButton(widget_4);
+        btn_install_driver->setObjectName(QString::fromUtf8("btn_install_driver"));
+        btn_install_driver->setMaximumSize(QSize(100, 16777215));
+
+        horizontalLayout_3->addWidget(btn_install_driver);
+
+        cbb_auto_start = new QCheckBox(widget_4);
+        cbb_auto_start->setObjectName(QString::fromUtf8("cbb_auto_start"));
+        cbb_auto_start->setLayoutDirection(Qt::LeftToRight);
+
+        horizontalLayout_3->addWidget(cbb_auto_start);
+
+        btn_pf_new = new QPushButton(widget_4);
+        btn_pf_new->setObjectName(QString::fromUtf8("btn_pf_new"));
+        btn_pf_new->setMaximumSize(QSize(40, 16777215));
+
+        horizontalLayout_3->addWidget(btn_pf_new);
+
+        btn_pf_save = new QPushButton(widget_4);
+        btn_pf_save->setObjectName(QString::fromUtf8("btn_pf_save"));
+        btn_pf_save->setMaximumSize(QSize(40, 16777215));
+
+        horizontalLayout_3->addWidget(btn_pf_save);
+
+        btn_pf_delete = new QPushButton(widget_4);
+        btn_pf_delete->setObjectName(QString::fromUtf8("btn_pf_delete"));
+        btn_pf_delete->setMaximumSize(QSize(50, 16777215));
+
+        horizontalLayout_3->addWidget(btn_pf_delete);
+
+        btn_pf_load = new QPushButton(widget_4);
+        btn_pf_load->setObjectName(QString::fromUtf8("btn_pf_load"));
+
+        horizontalLayout_3->addWidget(btn_pf_load);
+
+        cbb_profile = new QComboBox(widget_4);
+        cbb_profile->setObjectName(QString::fromUtf8("cbb_profile"));
+        cbb_profile->setMinimumSize(QSize(100, 0));
+
+        horizontalLayout_3->addWidget(cbb_profile);
+
+
+        verticalLayout_4->addWidget(widget_4);
+
+        scrollArea = new QScrollArea(widget_2);
+        scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
+        scrollArea->setMinimumSize(QSize(450, 0));
+        scrollArea->setWidgetResizable(true);
+        scrollAreaWidgetContents = new QWidget();
+        scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 781, 4395));
+        verticalLayout_3 = new QVBoxLayout(scrollAreaWidgetContents);
+        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        widget_5 = new QWidget(scrollAreaWidgetContents);
+        widget_5->setObjectName(QString::fromUtf8("widget_5"));
+        verticalLayout_2 = new QVBoxLayout(widget_5);
+        verticalLayout_2->setSpacing(10);
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        label = new QLabel(widget_5);
+        label->setObjectName(QString::fromUtf8("label"));
+        label->setMaximumSize(QSize(16777215, 40));
+        QFont font;
+        font.setPointSize(12);
+        font.setBold(true);
+        font.setWeight(75);
+        label->setFont(font);
+        label->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_2->addWidget(label);
+
+        widget_con = new QWidget(widget_5);
+        widget_con->setObjectName(QString::fromUtf8("widget_con"));
+        widget_con->setMinimumSize(QSize(380, 4320));
+        verticalLayout_5 = new QVBoxLayout(widget_con);
+        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
+
+        verticalLayout_2->addWidget(widget_con);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_2->addItem(verticalSpacer);
+
+
+        verticalLayout_3->addWidget(widget_5);
+
+        scrollArea->setWidget(scrollAreaWidgetContents);
+
+        verticalLayout_4->addWidget(scrollArea);
+
+
+        gridLayout_2->addWidget(widget_2, 0, 1, 1, 1);
+
+        widget = new QWidget(centralwidget);
+        widget->setObjectName(QString::fromUtf8("widget"));
+        verticalLayout = new QVBoxLayout(widget);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        groupBox = new QGroupBox(widget);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(20, 30, 241, 131));
         gridLayout = new QGridLayout(groupBox);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        pushButton = new QPushButton(groupBox);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        label_1 = new QLabel(groupBox);
+        label_1->setObjectName(QString::fromUtf8("label_1"));
+        label_1->setMinimumSize(QSize(400, 400));
 
-        gridLayout->addWidget(pushButton, 0, 0, 1, 1);
+        gridLayout->addWidget(label_1, 0, 0, 1, 1);
 
-        pushButton_3 = new QPushButton(groupBox);
-        pushButton_3->setObjectName(QString::fromUtf8("pushButton_3"));
 
-        gridLayout->addWidget(pushButton_3, 0, 1, 1, 1);
+        verticalLayout->addWidget(groupBox);
 
-        pushButton_2 = new QPushButton(groupBox);
-        pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
+        widget_3 = new QWidget(widget);
+        widget_3->setObjectName(QString::fromUtf8("widget_3"));
+        widget_3->setMaximumSize(QSize(16777215, 40));
+        horizontalLayout_2 = new QHBoxLayout(widget_3);
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
 
-        gridLayout->addWidget(pushButton_2, 1, 0, 1, 1);
+        verticalLayout->addWidget(widget_3);
 
-        pushButton_4 = new QPushButton(groupBox);
-        pushButton_4->setObjectName(QString::fromUtf8("pushButton_4"));
 
-        gridLayout->addWidget(pushButton_4, 1, 1, 1, 1);
+        gridLayout_2->addWidget(widget, 0, 0, 1, 1);
 
-        pushButton_5 = new QPushButton(centralwidget);
-        pushButton_5->setObjectName(QString::fromUtf8("pushButton_5"));
-        pushButton_5->setGeometry(QRect(400, 240, 75, 23));
-        horizontalSlider = new QSlider(centralwidget);
-        horizontalSlider->setObjectName(QString::fromUtf8("horizontalSlider"));
-        horizontalSlider->setGeometry(QRect(290, 150, 160, 16));
-        horizontalSlider->setValue(50);
-        horizontalSlider->setOrientation(Qt::Horizontal);
-        lb_slider = new QLabel(centralwidget);
-        lb_slider->setObjectName(QString::fromUtf8("lb_slider"));
-        lb_slider->setGeometry(QRect(290, 130, 161, 16));
-        btn_ld = new QPushButton(centralwidget);
-        btn_ld->setObjectName(QString::fromUtf8("btn_ld"));
-        btn_ld->setGeometry(QRect(30, 250, 80, 20));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 503, 22));
+        menubar->setGeometry(QRect(0, 0, 1280, 21));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -121,22 +228,16 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        pushButton_6->setText(QCoreApplication::translate("MainWindow", "Exit", nullptr));
-        groupBox_2->setTitle(QCoreApplication::translate("MainWindow", "Select Handgesture", nullptr));
-        comboBox->setItemText(0, QCoreApplication::translate("MainWindow", "Drag", nullptr));
-        comboBox->setItemText(1, QCoreApplication::translate("MainWindow", "Tap", nullptr));
-        comboBox->setItemText(2, QCoreApplication::translate("MainWindow", "Thumb", nullptr));
-        comboBox->setItemText(3, QCoreApplication::translate("MainWindow", "Knock", nullptr));
-        comboBox->setItemText(4, QCoreApplication::translate("MainWindow", "Slide", nullptr));
-
-        groupBox->setTitle(QCoreApplication::translate("MainWindow", "Options", nullptr));
-        pushButton->setText(QCoreApplication::translate("MainWindow", "Load Driver", nullptr));
-        pushButton_3->setText(QCoreApplication::translate("MainWindow", "Disable Driver", nullptr));
-        pushButton_2->setText(QCoreApplication::translate("MainWindow", "Enable gesture", nullptr));
-        pushButton_4->setText(QCoreApplication::translate("MainWindow", "Disable gesture", nullptr));
-        pushButton_5->setText(QCoreApplication::translate("MainWindow", "...", nullptr));
-        lb_slider->setText(QCoreApplication::translate("MainWindow", "text value:50", nullptr));
-        btn_ld->setText(QCoreApplication::translate("MainWindow", "link_driver", nullptr));
+        btn_change_driver->setText(QCoreApplication::translate("MainWindow", "Disable Driver", nullptr));
+        btn_install_driver->setText(QCoreApplication::translate("MainWindow", "Install Driver", nullptr));
+        cbb_auto_start->setText(QCoreApplication::translate("MainWindow", "Start with Windows", nullptr));
+        btn_pf_new->setText(QCoreApplication::translate("MainWindow", "New", nullptr));
+        btn_pf_save->setText(QCoreApplication::translate("MainWindow", "Save", nullptr));
+        btn_pf_delete->setText(QCoreApplication::translate("MainWindow", "Delete", nullptr));
+        btn_pf_load->setText(QCoreApplication::translate("MainWindow", "Load", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "Gesture Mapping", nullptr));
+        groupBox->setTitle(QString());
+        label_1->setText(QCoreApplication::translate("MainWindow", "Driver Disabled", nullptr));
     } // retranslateUi
 
 };
