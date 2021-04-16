@@ -225,10 +225,10 @@ float innerAngle(float px1, float py1, float px2, float py2, float cx1, float cy
         Ay = py1;
     }
 
-    float Q1 = Cx - Ax;
-    float Q2 = Cy - Ay;
-    float P1 = Bx - Ax;
-    float P2 = By - Ay;
+    float Q1 = Ax - Cx;
+    float Q2 = Ay - Cy;
+    float P1 = Bx - Cx;
+    float P2 = By - Cy;
     float A = acos((P1 * Q1 + P2 * Q2) / (sqrt(P1 * P1 + P2 * P2) * sqrt(Q1 * Q1 + Q2 * Q2)));
 
     return (A * 180 / PI);
@@ -285,7 +285,7 @@ Mat captureImage(void) {
                     Point p2 = defectPoint[i][k];
                     Point c1 = hullPoint[i][k];
                     float angle = innerAngle(p1.x, p1.y, p2.x, p2.y, c1.x, c1.y);
-                    if (round(angle) < 90)
+                    if (round(angle) <= 60)
                         fingerCount++;
                 }
 
