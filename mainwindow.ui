@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <property name="minimumSize">
     <size>
-     <width>1280</width>
+     <width>1400</width>
      <height>900</height>
     </size>
    </property>
@@ -54,7 +54,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Disable Driver</string>
+             <string>Enable Driver</string>
             </property>
            </widget>
           </item>
@@ -156,7 +156,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>781</width>
+            <width>901</width>
             <height>4395</height>
            </rect>
           </property>

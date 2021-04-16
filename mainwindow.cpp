@@ -12,8 +12,11 @@
 #include <QString>
 #include "QInputDialog"
 #include "QDir"
+#include <shellapi.h>
 
 QSettings settingsQT("settings.ini", QSettings::IniFormat);
+QSettings bootUpSettings("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+QString app_path = QCoreApplication::applicationFilePath();
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -31,20 +34,17 @@ MainWindow::MainWindow(QWidget* parent)
     this->refresh_profile();
     p_data = Profile_data();
     profiles = QList<QString>();
-    MyThread* thread = new MyThread(this);
-    thread->win = this;
-    thread->start();
-    ui->btn_change_driver->setText("Disable Driver");
 
-    driverInitialize();
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     timer->start(1000 / 60);
 }
 
 void MainWindow::update() {
-    pic_window(captureImage(), labels[0]);
-    sendReport();
+    if (Driver_Enabled) {
+        pic_window(captureImage(), labels[0]);
+        sendReport();
+    }
 }
 
 MainWindow::~MainWindow()
@@ -59,11 +59,9 @@ void MainWindow::on_pushButton_5_clicked()
         QString::fromLocal8Bit("Please put this file in XX folder to execute"));
 }
 
-
-
 void MainWindow::on_btn_ld_clicked()
 {
-    //setup_windows();
+
 }
 
 void MainWindow::on_pushButton_6_clicked()
@@ -79,6 +77,7 @@ void MainWindow::on_btn_change_driver_clicked()
         text = "Enable Driver";
     }
     else {
+        driverInitialize();
         Driver_Enabled = true;
         text = "Disable Driver";
     }
@@ -87,9 +86,10 @@ void MainWindow::on_btn_change_driver_clicked()
 
 void MainWindow::on_btn_install_driver_clicked()
 {
-    Driver_Setting_Window* win = new Driver_Setting_Window();
-    win->setWindowTitle("Driver Guider");
-    win->show();
+    ShellExecute(0, 0, L"https://github.com/ViGEm/ViGEmBus/releases", 0, 0, SW_SHOW);
+    //Driver_Setting_Window* win = new Driver_Setting_Window();
+    //win->setWindowTitle("Driver Guider");
+    //win->show();
 }
 
 void MainWindow::pic_window(cv::Mat cvImg, QLabel* lb) {
@@ -121,20 +121,6 @@ void MainWindow::pic_window(cv::Mat cvImg, QLabel* lb) {
 }
 
 void MainWindow::put_window(QString src, QWidget* parent) {
-
-}
-
-
-MyThread::MyThread(QObject* parent) {
-
-}
-
-MyThread::~MyThread() {
-
-}
-
-void MyThread::run()
-{
 
 }
 
@@ -191,6 +177,15 @@ void MainWindow::on_btn_pf_load_clicked()
     }
     QString fname = QApplication::applicationDirPath() + "/profiles/" + ui->cbb_profile->currentText() + ".profile";
 
+    if (ui->cbb_auto_start->isChecked()) {
+        bootUpSettings.setValue("Hand Gesture Gamepad", app_path);
+        settingsQT.setValue("startup/enabled", "true");
+    }
+    else {
+        bootUpSettings.remove("Hand Gesture Gamepad");
+        settingsQT.setValue("startup/enabled", "false");
+    }
+
     settingsQT.setValue("currentProfile/profileName", ui->cbb_profile->currentText());
 
     for (int i = 0; i <= 5; i++) {
@@ -246,13 +241,23 @@ void MainWindow::on_btn_pf_delete_clicked()
     }
 }
 
+void MainWindow::on_driverButton_clicked()
+{
+    ShellExecute(0, 0, L"https://github.com/ViGEm/ViGEmBus/releases", 0, 0, SW_SHOW);
+}
+
+void MainWindow::on_driverButton2_clicked()
+{
+    ShellExecute(0, 0, L"https://support.xbox.com/en-CA/help/xbox-360/xbox-on-windows/accessories/xbox-controller-for-windows-setup", 0, 0, SW_SHOW);
+}
+
 void MainWindow::on_cbb_profile_currentIndexChanged(const QString& arg1)
 {
     p_data.g_datas.clear();
     if (arg1 != "") {
         QString fname = QApplication::applicationDirPath() + "/profiles/" + arg1 + ".profile";
         p_data.load_file(fname);
-        for (int index = 0; index < 6; index++) {
+        for (int index = 0; index <= 5; index++) {
             g_panel_list[index]->load(p_data.g_datas[index]);
         }
     }

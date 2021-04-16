@@ -81,7 +81,7 @@ void Gesture_panel::load(Gesture_data gd){
     ui->slider_5->setValue(gd.LT);
     ui->slider_6->setValue(gd.RT);
 
-    for(int i = 0; i = 13; i++){
+    for(int i = 0; i <= 13; i++){
         if(gd.buttons[i] == 1)
             boxes[i]->setChecked(true);
         else

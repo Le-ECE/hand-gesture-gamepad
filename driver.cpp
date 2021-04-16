@@ -176,7 +176,6 @@ int driverInitialize(void) {
         return -1;
     }
 
-    loadProfile();
     return 0;
 }
 

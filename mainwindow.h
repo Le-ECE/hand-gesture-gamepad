@@ -21,7 +21,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    bool Driver_Enabled=false;
+    bool Driver_Enabled = false;
     void pic_window(cv::Mat pic,QLabel* lb);
     void put_window(QString src,QWidget* parent);
     void update_profile();
@@ -40,6 +40,8 @@ private slots:
     void on_btn_pf_save_clicked();
     void on_btn_pf_delete_clicked();
     void on_btn_pf_load_clicked();
+    void on_driverButton_clicked();
+    void on_driverButton2_clicked();
     void on_cbb_profile_currentIndexChanged(const QString &arg1);
 
 private:
@@ -51,25 +53,4 @@ private:
     QList<Gesture_panel*> g_panel_list;
     QTimer* timer;
 };
-
-
-
-class MyThread : public QThread
-{
-    Q_OBJECT
-public:
-    explicit MyThread(QObject *parent = 0);
-    MainWindow* win;
-    ~MyThread();
-
-protected:
-    void run();
-
-
-signals:
-
-public slots:
-};
-
-
 #endif // MAINWINDOW_H

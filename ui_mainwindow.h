@@ -71,7 +71,7 @@ public:
         MainWindow->resize(1280, 941);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-        centralwidget->setMinimumSize(QSize(1280, 900));
+        centralwidget->setMinimumSize(QSize(1400, 900));
         gridLayout_2 = new QGridLayout(centralwidget);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
         widget_2 = new QWidget(centralwidget);
@@ -141,7 +141,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 781, 4395));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 901, 4395));
         verticalLayout_3 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
         widget_5 = new QWidget(scrollAreaWidgetContents);
@@ -228,7 +228,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        btn_change_driver->setText(QCoreApplication::translate("MainWindow", "Disable Driver", nullptr));
+        btn_change_driver->setText(QCoreApplication::translate("MainWindow", "Enable Driver", nullptr));
         btn_install_driver->setText(QCoreApplication::translate("MainWindow", "Install Driver", nullptr));
         cbb_auto_start->setText(QCoreApplication::translate("MainWindow", "Start with Windows", nullptr));
         btn_pf_new->setText(QCoreApplication::translate("MainWindow", "New", nullptr));

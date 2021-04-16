@@ -49,10 +49,12 @@ void Profile_data::load_file(QString fname) {
     QFile file(fname);
     this->g_datas.clear();
     bool isOK = file.open(QIODevice::ReadOnly);
-    int but;
+    int but = 0;
+
     if (isOK == true) {
         for (int index = 0; index < 6; index++) {
             Gesture_data gd = Gesture_data();
+            QList<int> buttonsReversed;
 
             gd.gName = file.readLine().simplified();
             gd.LS_X = file.readLine().toInt();
@@ -66,24 +68,29 @@ void Profile_data::load_file(QString fname) {
             for (int i = 13; i >= 0; i--) {
                 if (i > 9) {
                     if (but - pow(2, i + 2) >= 0) {
-                        gd.buttons[i] = 1;
+                        buttonsReversed << 1;
                         but -= pow(2, i + 2);
                     }
                     else
-                        gd.buttons[i] = 0;
+                        buttonsReversed << 0;
                 }
                 else {
                     if (but - pow(2, i) >= 0) {
-                        gd.buttons[i] = 1;
+                        buttonsReversed << 1;
                         but -= pow(2, i);
                     }
                     else
-                        gd.buttons[i] = 0;
+                        buttonsReversed << 0;
                 }
+            }
+
+            for (int j = 0; j <= 13; j++) {
+                gd.buttons << buttonsReversed[13 - j];
             }
 
             this->g_datas << gd;
         }
     }
+
     file.close();
 }
