@@ -1,4 +1,4 @@
-/* Air Wheel Driver.cpp
+/* driver.cpp
 Nhat Vu Le
 Majed Qarmout
 Haoran Zhou
@@ -24,10 +24,10 @@ Yu Zhang
 #include "ViGEm/Util.h"
 #include "ViGEm/Common.h"
 
-// C/C++ Imports
+// C and C++ Imports
 #include "iostream"
-#include "fstream"
 #include "string"
+#include "fstream"
 #include "stdio.h"
 #include "stdlib.h"
 
@@ -123,6 +123,7 @@ GESTURE configGesture(
     return assign;
 }
 
+// Used to read values from settings file
 PROFILE configProfile() {
     PROFILE assign;
 
@@ -153,6 +154,7 @@ PROFILE configProfile() {
     return assign;
 }
 
+// Checks if webcam device is available and communication to driver is functional
 int driverInitialize(void) {
     XUSB_REPORT_INIT(&report);						
 
@@ -179,14 +181,13 @@ int driverInitialize(void) {
     return 0;
 }
 
+// Helper function called by mainwindow.cpp
 void loadProfile(void) {
-    // LOAD LAST USED PROFILE VIA SETTINGS.INI
-        // GUI will read from profileName.ini and overwrite settings file, and currentProfile is set to that
-        // Visual Studio Debugger reads settings.ini from root folder, running exe directly reads settings file in same folder as exe
     currentProfile = configProfile();
     currentGesture = currentProfile.list[0]; // Default Gesture (This line must be run after assigning gestures)
 }
 
+// Greyscale Image Matrix
 Mat gray_image(Mat img_gray, Mat img_roi)
 {
     cvtColor(img_roi, img_gray, COLOR_BGR2GRAY);
@@ -194,12 +195,14 @@ Mat gray_image(Mat img_gray, Mat img_roi)
     return img_gray;
 }
 
+// Thresholded Image Matrix
 Mat threshold_image(Mat img_gray, Mat img_threshold)
 {
     threshold(img_gray, img_threshold, 0, 255, THRESH_BINARY_INV + THRESH_OTSU);
     return img_threshold;
 }
 
+// Calculation of angle between two fingers
 float innerAngle(float px1, float py1, float px2, float py2, float cx1, float cy1)
 {
     float dist1 = sqrt((px1 - cx1) * (px1 - cx1) + (py1 - cy1) * (py1 - cy1));
@@ -234,6 +237,7 @@ float innerAngle(float px1, float py1, float px2, float py2, float cx1, float cy
     return (A * 180 / PI);
 }
 
+// Captures image from webcam, finds contours and number of fingers held up
 Mat captureImage(void) {
     cam.read(img);
     Rect roi(0, 0, 300, 300);
@@ -285,13 +289,13 @@ Mat captureImage(void) {
                     Point p2 = defectPoint[i][k];
                     Point c1 = hullPoint[i][k];
                     float angle = innerAngle(p1.x, p1.y, p2.x, p2.y, c1.x, c1.y);
-                    if (round(angle) <= 60)
+                    if (round(angle) <= 180)
                         fingerCount++;
                 }
 
                 drawContours(img_roi, contours, i, Scalar(0, 255, 0), 1, 8, vector<Vec4i>(), 0, Point());
 
-                if (fingerCount == 6)
+                if (fingerCount > 5)
                     fingerCount = 5;
             }
         }
@@ -302,6 +306,7 @@ Mat captureImage(void) {
     return(img);
 }
 
+// Sends gamepad report to driver
 void sendReport(void) {
     if (fingerCount >= 0 && fingerCount <= 5)
         currentGesture = currentProfile.list[fingerCount];

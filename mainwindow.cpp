@@ -1,23 +1,34 @@
-﻿#include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include <QMessageBox>
+﻿/* mainwindow.cpp
+Nhat Vu Le
+Majed Qarmout
+Haoran Zhou
+Yu Zhang
+*/
+
+// OpenCV and Windows imports
 #include "driver.h"
+#include <shellapi.h>
 #include <opencv2/highgui/highgui_c.h>
 #include "opencv2/imgproc/imgproc.hpp"
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/videoio/videoio.hpp>
 
+// QT Header Files
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include <QMessageBox>
 #include <QSettings>
 #include <QString>
 #include "QInputDialog"
 #include "QDir"
-#include <shellapi.h>
 
+// Settings path for run on startup
 QSettings settingsQT("settings.ini", QSettings::IniFormat);
 QSettings bootUpSettings("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
 QString app_path = QCoreApplication::applicationFilePath();
 
+// Constructor method
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -37,9 +48,10 @@ MainWindow::MainWindow(QWidget* parent)
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-    timer->start(1000 / 60);
+    timer->start(1000 / 30);
 }
 
+// Slot called by timer running at 30 Hz
 void MainWindow::update() {
     if (Driver_Enabled) {
         pic_window(captureImage(), labels[0]);
@@ -47,11 +59,11 @@ void MainWindow::update() {
     }
 }
 
+// Run on program exit
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
 
 void MainWindow::on_pushButton_5_clicked()
 {
@@ -64,11 +76,13 @@ void MainWindow::on_btn_ld_clicked()
 
 }
 
+// Closes program on button click
 void MainWindow::on_pushButton_6_clicked()
 {
     this->close();
 }
 
+// Toggles status of driver
 void MainWindow::on_btn_change_driver_clicked()
 {
     QString text;
@@ -84,17 +98,16 @@ void MainWindow::on_btn_change_driver_clicked()
     ui->btn_change_driver->setText(text);
 }
 
+// Opens shortcut to latest driver version
 void MainWindow::on_btn_install_driver_clicked()
 {
     ShellExecute(0, 0, L"https://github.com/ViGEm/ViGEmBus/releases", 0, 0, SW_SHOW);
-    //Driver_Setting_Window* win = new Driver_Setting_Window();
-    //win->setWindowTitle("Driver Guider");
-    //win->show();
 }
 
+// Generates QImage from OpenCV matrix, embeds webcam capture within GUI
 void MainWindow::pic_window(cv::Mat cvImg, QLabel* lb) {
     QImage qImg;
-    if (cvImg.channels() == 3)                             //3 channels color image
+    if (cvImg.channels() == 3)                             
     {
 
         cv::cvtColor(cvImg, cvImg, CV_BGR2RGB);
@@ -103,7 +116,7 @@ void MainWindow::pic_window(cv::Mat cvImg, QLabel* lb) {
             cvImg.cols * cvImg.channels(),
             QImage::Format_RGB888);
     }
-    else if (cvImg.channels() == 1)                    //grayscale image
+    else if (cvImg.channels() == 1)                    
     {
         qImg = QImage((const unsigned char*)(cvImg.data),
             cvImg.cols, cvImg.rows,
@@ -124,6 +137,7 @@ void MainWindow::put_window(QString src, QWidget* parent) {
 
 }
 
+// Creates new user profile
 void MainWindow::on_btn_pf_new_clicked()
 {
     bool isOK = false;
@@ -149,6 +163,7 @@ void MainWindow::update_profile() {
 
 }
 
+// Loads in profiles on program startup
 void MainWindow::refresh_profile() {
     profiles.clear();
     ui->cbb_profile->clear();
@@ -168,6 +183,7 @@ void MainWindow::refresh_profile() {
     ui->cbb_profile->addItems(profiles);
 }
 
+// Loads current program values into driver
 void MainWindow::on_btn_pf_load_clicked()
 {
     p_data.g_datas.clear();
@@ -213,6 +229,7 @@ void MainWindow::on_btn_pf_load_clicked()
     loadProfile();
 }
 
+// Saves current configuration to profile file
 void MainWindow::on_btn_pf_save_clicked()
 {
     p_data.g_datas.clear();
@@ -225,6 +242,7 @@ void MainWindow::on_btn_pf_save_clicked()
     p_data.save_as_file(fname);
 }
 
+// Deletes currently selected profile
 void MainWindow::on_btn_pf_delete_clicked()
 {
     QMessageBox msg(this);
@@ -241,6 +259,7 @@ void MainWindow::on_btn_pf_delete_clicked()
     }
 }
 
+// Submenu for driver installation window
 void MainWindow::on_driverButton_clicked()
 {
     ShellExecute(0, 0, L"https://github.com/ViGEm/ViGEmBus/releases", 0, 0, SW_SHOW);
@@ -251,6 +270,7 @@ void MainWindow::on_driverButton2_clicked()
     ShellExecute(0, 0, L"https://support.xbox.com/en-CA/help/xbox-360/xbox-on-windows/accessories/xbox-controller-for-windows-setup", 0, 0, SW_SHOW);
 }
 
+// Refreshes profiles when selected from dropdown menu
 void MainWindow::on_cbb_profile_currentIndexChanged(const QString& arg1)
 {
     p_data.g_datas.clear();
